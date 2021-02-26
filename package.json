@@ -1,0 +1,23 @@
+{
+  "name": "screpa",
+  "version": "0.0.1",
+  "description": "The web scrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vzdrizhni/Spiritual-Screpa.git"
+  },
+  "author": "Vzdrizhni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vzdrizhni/Spiritual-Screpa/issues"
+  },
+  "homepage": "https://github.com/vzdrizhni/Spiritual-Screpa#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.5",
+    "puppeteer": "^8.0.0"
+  }
+}
