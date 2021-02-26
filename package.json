@@ -4,7 +4,8 @@
   "description": "The web scrapper",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,9 @@
   },
   "homepage": "https://github.com/vzdrizhni/Spiritual-Screpa#readme",
   "dependencies": {
+    "chalk": "^4.1.0",
     "cheerio": "^1.0.0-rc.5",
-    "puppeteer": "^8.0.0"
+    "puppeteer": "^8.0.0",
+    "transliteration": "^2.2.0"
   }
 }
