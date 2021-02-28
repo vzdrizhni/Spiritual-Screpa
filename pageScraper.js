@@ -15,12 +15,12 @@ const scraperObject = {
         fruits = fruits.filter(elem => elem != "Can't Find What You're Looking For?").filter(elem => elem != 'How do You Keep Track?');
 
         fruits.forEach(async(item, index) => {
-            obj[item] = await page.$$eval(`.col_50_50:nth-of-type(${index + 1}) tbody tr`, (nutrients) => {
-                return nutrients;
+            obj[item] = await page.$eval(`.col_50_50:nth-of-type(${index + 1}) tbody tr td`, (nutrients) => {
+                return nutrients.innerHTML;
             })
         });
 
-        console.log(fruits.length);
+        console.log(fruits);
         console.log(obj);    
        
     }
