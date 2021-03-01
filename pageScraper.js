@@ -1,3 +1,5 @@
+fs = require('fs');
+
 const scraperObject = {
     url: 'https://www.weightlossresources.co.uk/calories/calorie_counter/vegetables.htm',
     async scraper(browser) {
@@ -7,7 +9,7 @@ const scraperObject = {
         // Wait for the required DOM to be rendered
         await page.waitForSelector('article');
         // Get the link to all the required books
-        
+
         food = [];
         let result;
         let fruits = await page.$$eval('.maincontent > h2', (headers) => {
@@ -35,8 +37,13 @@ const scraperObject = {
         }))
 
         // console.log(fruits);
-        console.log(food);
-
+        // console.log(food);
+        fs.writeFile('vegetables.txt', JSON.stringify(food), function (err, data) {
+            if (err) {
+                return console.log(err);
+            }
+            console.log(data);
+        });
     }
 
 }
