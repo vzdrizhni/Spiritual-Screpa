@@ -2,6 +2,7 @@ fs = require('fs');
 
 const scraperObject = {
     url: 'https://www.weightlossresources.co.uk/calories/calorie_counter/vegetables.htm',
+    anotherUrl: 'https://tools.myfooddata.com/nutrient-ranking-tool/Calories/All/Highest/100g/Common/No',
     async scraper(browser) {
         let page = await browser.newPage();
         console.log(`Navigating to ${this.url}...`);
@@ -44,6 +45,20 @@ const scraperObject = {
             }
             console.log(data);
         });
+    },
+    async hugeScrapper(browser) {
+        let page = await browser.newPage();
+        console.log(`Navigating to ${this.anotherUrl}...`);
+        await page.goto(this.anotherUrl);
+        await page.waitFor(5000);
+        await page.waitForSelector('.nrbutton');        
+        await page.click('.nrbutton');
+        await page.waitFor(5000);
+        let urls = await page.$$eval('#foodlistranking > li', links => {
+            links = links.map(el => el.querySelector('div > a').href)
+            return links;
+        })
+        console.log(urls.length);
     }
 
 }
