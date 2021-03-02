@@ -51,7 +51,7 @@ const scraperObject = {
         console.log(`Navigating to ${this.anotherUrl}...`);
         await page.goto(this.anotherUrl);
         await page.waitForSelector('#foodlistranking');
-        
+
         await page.$eval('#datasourcenr',
             e => {
                 e.scrollIntoView({
@@ -68,29 +68,39 @@ const scraperObject = {
         })
         console.log(urls);
 
-        let pagePromise = (link) => new Promise(async(resolve, reject) => {
+        let pagePromise = (link) => new Promise(async (resolve, reject) => {
             let dataObj = {};
             let newPage = await browser.newPage();
             await newPage.goto(link);
-            dataObj['bookTitle'] = await newPage.$eval('.product_main > h1', text => text.textContent);
-            dataObj['bookPrice'] = await newPage.$eval('.price_color', text => text.textContent);
-            dataObj['noAvailable'] = await newPage.$eval('.instock.availability', text => {
-                // Strip new line and tab spaces
-                text = text.textContent.replace(/(\r\n\t|\n|\r|\t)/gm, "");
-                // Get the number of stock available
-                let regexp = /^.*\((.*)\).*$/i;
-                let stockAvailable = regexp.exec(text)[1].split(' ')[0];
-                return stockAvailable;
-            });
-            dataObj['imageUrl'] = await newPage.$eval('#product_gallery img', img => img.src);
-            dataObj['bookDescription'] = await newPage.$eval('#product_description', div => div.nextSibling.nextSibling.textContent);
-            dataObj['upc'] = await newPage.$eval('.table.table-striped > tbody > tr > td', table => table.textContent);
+            dataObj.name = await newPage.$eval('#nutritionfactsresults > h1', text => text.textContent),
+            dataObj.data = {
+                calories: await newPage.$eval('#summaryData > div.summaryDataWrap > ul:nth-child(1) > li:nth-child(1) > span.mainNum', text => text.textContent),
+                carbohydrate: await newPage.$eval('#summaryData > div.summaryDataWrap > ul:nth-child(1) > li:nth-child(4) > span.mainNum', text => text.textContent),
+                protein: await newPage.$eval('#summaryData > div.summaryDataWrap > ul:nth-child(1) > li:nth-child(2) > span.mainNum', text => text.textContent),
+                fat: await newPage.$eval('#summaryData > div.summaryDataWrap > ul:nth-child(1) > li:nth-child(3) > span.mainNum', text => text.textContent),
+                fibre: await newPage.$eval('#summaryData > div.summaryDataWrap > ul:nth-child(2) > li:nth-child(1) > span.mainNum', text => text.textContent)
+            }
             resolve(dataObj);
             await newPage.close();
         });
 
         urls = urls.map(item => item.substr(0, item.lastIndexOf("/")).concat("/100g"));
-        console.log(urls);
+
+        const scrapedData = []
+
+        for (link in urls) {
+            let currentPageData = await pagePromise(urls[link]);
+            scrapedData.push(currentPageData);
+            console.log(currentPageData);
+        }
+
+        fs.writeFile('food.txt', JSON.stringify(scrapedData), function (err, data) {
+            if (err) {
+                return console.log(err);
+            }
+            console.log(data);
+        });
+
     }
 
 }
