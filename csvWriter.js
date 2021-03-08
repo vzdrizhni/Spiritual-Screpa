@@ -1,23 +1,15 @@
 var fs = require('fs');
+const ObjectsToCsv = require('objects-to-csv');
 
-const dataToWrite = fs.readFile('feed.txt', function(err, contents) {
-    console.log(contents);
-    fs.writeFile('data.csv', contents, 'utf8', function (err) {
-        if (err) {
-            console.log('Some error occured - file either not saved or corrupted file saved.');
-        } else {
-            console.log('It\'s saved!');
-        }
-    });
+const dataToWrite = fs.readFile('feed.txt', async function (err, contents) {
+    
+    var array = contents.toString().split("\n");
+
+    const parsedArr = JSON.parse(array);
+    
+    const csv = new ObjectsToCsv(parsedArr);
+    
+    // Save to file:
+    await csv.toDisk('./test.csv');
+   
 });
-
-// JSON.parse(dataToWrite);
-// console.log(dataToWrite);
-
-// fs.writeFile('data.csv', dataToWrite, 'utf8', function (err) {
-//     if (err) {
-//         console.log('Some error occured - file either not saved or corrupted file saved.');
-//     } else {
-//         console.log('It\'s saved!');
-//     }
-// });
