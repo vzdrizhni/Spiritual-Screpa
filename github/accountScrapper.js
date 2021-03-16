@@ -1,12 +1,8 @@
 const puppeteer = require('puppeteer');
 const csv = require('csv-parser');
 const fs = require('fs');
-const cookies = require('../cookies');
 
 const results = [];
-
-// const cookie = JSON.stringify(cookies.cookie);
-// console.log(cookie);
 
 fs.createReadStream('users.csv')
     .pipe(csv())
